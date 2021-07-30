@@ -34,8 +34,9 @@ app.post('/login', (req, res) => {
     })
 })
 
-app.post('/signin', (req, res) => {
+app.post('/verify', (req, res) => {
    const { authorization: jwt} = req.headers;
+   console.log(jwt);
    const token = jwt.split(' ')[1];
    AuthService.verifyJWT(token).then(result => {
       res.send(result);

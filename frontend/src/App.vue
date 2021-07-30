@@ -1,13 +1,23 @@
 <template>
-  <div></div>
+  <div>
+    <Login></Login>
+  </div>
 </template>
 
 <script>
+import Login from "./components/Login.vue";
 
 export default {
   name: 'App',
   components: {
-  }
+    Login
+  },
+
+  data(){
+    return {
+      authenticated: false
+    }
+  },
 }
 </script>
 
