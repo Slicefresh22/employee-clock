@@ -29,8 +29,12 @@ app.get('/', (req, res) => {
 
 app.post('/login', (req, res) => {
     const {username, password} = req.body;
-    AuthService.login(username, password).then(token => {
+    AuthService.login(username, password)
+    .then(token => {
        res.send(token);
+    })
+    .catch(err => {
+        res.send(err);
     })
 })
 

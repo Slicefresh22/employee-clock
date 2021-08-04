@@ -46,6 +46,7 @@ export const store = createStore({
         }else {
             AppService.deleteLocalStorage('token');
             commit('login', false);
+            commit('setLoginErrors', 'username or password are incorrect');
         }
       })
       .catch((err) => {
@@ -72,6 +73,10 @@ export const store = createStore({
 
     getCurrentUser: (state)=>{
       return state.currentUser;
+    }, 
+
+    getLoginErrorsList: (state)=>{
+      return state.loginErrors
     }
   },
 

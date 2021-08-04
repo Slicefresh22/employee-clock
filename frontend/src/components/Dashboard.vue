@@ -4,7 +4,7 @@
        <div class="dashboard-wrapper mt-4">
            <div class="card mr-3">
                 <div class="card-body">
-                    <h3> Welcome, {{ getCurrentUser.firstName }} </h3>
+                    <h3> Welcome, {{ getCurrentUser.firstname }} </h3>
                 </div>
             </div>
        </div>
