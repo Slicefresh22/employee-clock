@@ -40,7 +40,7 @@ app.post('/verify', (req, res) => {
    AuthService.verifyJWT(token).then(result => {
       res.send(result);
    }).catch(err => {
-       res.sendStatus(401);
+       res.send(false);
    })
 })
 

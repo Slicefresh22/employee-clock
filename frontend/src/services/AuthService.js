@@ -3,11 +3,7 @@ import AppService from "./AppService";
 
 const URL = "http://localhost:3000";
 
-const AuthService =
-  AuthService ||
-  (() => {
-    var isAuthenticated = false;
-
+const AuthService = AuthService || (() => {
     // login user method
     var login = async (username, password) => {
       return new Promise((resolve, reject) => {
@@ -27,7 +23,7 @@ const AuthService =
     };
 
     var verifyJWT = (token) => {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         if (token) {
           axios
             .post(
@@ -43,26 +39,37 @@ const AuthService =
               resolve(res);
             });
         } else {
-          reject("Not logged in");
+          resolve(false);
         }
       });
     };
 
-    var setAuthenticated = (status) => {
-      isAuthenticated = status;
-    };
+    var isAuthenticated = ()=> {
+      verifyJWT(AppService.readLocalStorage('token')).then(res => {
+        console.log(res);
+      })
+    }
 
-    var getAuthenticated = () => {
-      return isAuthenticated;
-    };
+    var getCurrentUser = ()=> {
+      return new Promise((resolve, reject) => {
+        verifyJWT(AppService.readLocalStorage('token'))
+        .then(res => {
+          resolve(res.data);
+        })
+        .catch(err => {
+          reject(err);
+        })
+      })
+
+    }
 
     // return methods
     return {
       Login: login,
       Logout: logout,
       VerifyJWT: verifyJWT,
-      setAuthenticated,
-      getAuthenticated,
+      isAuthenticated,
+      getCurrentUser
     };
   })();
 

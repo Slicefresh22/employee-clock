@@ -15,7 +15,7 @@ const AuthService = (() => {
             jwt.sign(
               payload,
               SECRET_KEY,
-              { expiresIn: "180s" },
+              { expiresIn: "300s" }, // 5 minutes
               (err, token) => {
                 if (err) reject(err);
                 resolve(token);

@@ -15,11 +15,7 @@
                                 <label for="password">Password</label>
                                 <input class="form-control" v-model="password" type="password" name="password">
                                 <br>
-                                <button class="form-control btn btn-dark" @click="login(username, password)">Login</button>
-                                <br>
-                                <button class="form-control btn btn-dark" @click="verify">Verify</button>
-                                <br>
-                                <button class="form-control btn btn-dark" @click="logout">Logout</button>
+                                <button class="form-control btn btn-dark" @click="login">{{ isLoading? 'Signing in...': 'Sign in' }} </button>
                             </div>
                         </form>
                     </div>
@@ -31,43 +27,40 @@
 </template>
 
 <script>
-import AuthService from '../services/AuthService'
-import AppService from '../services/AppService';
-
 export default {
     name: 'Login',
     data(){
         return {
             username: '',
-            password:''
+            password:'', 
+            isLoading: false,
+            timeoutId: 0
         }
     },
 
-    methods: {
-        login(username, password){
-            AuthService.Login(username,password).then((res) => {
-                const { data: token } = res;
-                if(token){
-                    AppService.writeLocalStorage('token', token);
-                    AuthService.setAuthenticated(true);
-                }else {
-                    AppService.deleteLocalStorage('token');
-                    AuthService.setAuthenticated(false);
-                }
-            })
-        },
-
-        logout(){
-            // log out remove the token from storage
-            AuthService.Logout();
-        },
-
-        verify(){
-            const token = AppService.readLocalStorage("token");
-            AuthService.VerifyJWT(token).then(res => {
-                res ? console.log('Verified'): console.log('Verify Failed');
-            })
+    computed: {
+        isAuthenticated(){
+            return this.$store.getters.getAuthStatus;
         }
+    }, 
+
+    methods: {
+        login(){
+            const data = {
+                username: this.username,
+                password: this.password
+            }
+            this.$store.dispatch('login',data);
+            this.isLoading = true;
+            this.timeoutId = setTimeout(() => {
+                this.$router.push('dashboard')
+            }, 2000)
+        }
+    },
+
+    unmount(){
+        // clear the timeout id
+        clearTimeout(this.timeoutId);
     }
 }
 </script>
